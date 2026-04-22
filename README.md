@@ -171,7 +171,21 @@ curl -I $URL
 
 Expected:
 - HTML output  
-- HTTP 200 OK  
+- HTTP 200 OK
+
+## ✅ Expected Output
+
+Example:
+
+curl $URL
+
+<h1>Hello AWS</h1>
+<p>nano daily practice</p>
+
+curl -I $URL
+
+HTTP/1.1 200 OK
+Content-Type: text/html
 
 ---
 
