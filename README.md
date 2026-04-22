@@ -3,32 +3,37 @@ cat << 'EOF' > README.md
 
 ---
 
-## 🎯 OBJECTIVE
+## 🎯 Objective
 
-Project ini simulate real workflow guna:
-- Bash (Linux terminal)
+This project demonstrates a complete end-to-end workflow using:
+
+- Linux Bash (CLI)
 - AWS CLI
-- S3 (static website)
+- Amazon S3 (Static Website Hosting)
 
 Goal:
-✔ Create file  
-✔ Upload ke AWS  
-✔ Publish website  
-✔ Test (HTTP)  
-✔ Cleanup  
 
-## 🔥 Why this project
+✔ Create local file  
+✔ Upload to AWS S3  
+✔ Configure public website  
+✔ Test using HTTP  
+✔ Clean up resources  
 
-This project demonstrates:
-- real AWS CLI workflow
-- S3 static hosting
-- debugging cloud errors
-
-👉 Website boleh access = SUCCESS ✅
+👉 If the website is accessible → SUCCESS ✅
 
 ---
 
-## 🧠 FULL FLOW
+## 🧠 Architecture
+
+Local Machine (Bash CLI)
+        ↓
+   AWS S3 Bucket
+        ↓
+ Public Website (HTTP)
+
+---
+
+## 🔁 Workflow
 
 CREATE → VERIFY → CREATE BUCKET → UPLOAD → VERIFY → CONFIG → TEST → DELETE
 
@@ -41,23 +46,16 @@ CREATE → VERIFY → CREATE BUCKET → UPLOAD → VERIFY → CONFIG → TEST �
 cd ~  
 mkdir nano1-test && cd nano1-test  
 
-Type:
-- cd, mkdir → ✅ WAJIB HAFAL  
-- nano1-test → 🟡 CUSTOM  
-
 ---
 
-## STEP 2 — Create File
+## STEP 2 — Create HTML File
 
 nano index.html  
 
 Example:
+
 <h1>Hello AWS</h1>  
 <p>nano daily practice</p>  
-
-Type:
-- nano → ✅ WAJIB HAFAL  
-- index.html → 🟡 CUSTOM  
 
 ---
 
@@ -68,31 +66,23 @@ Type:
 ls  
 cat index.html  
 
-Type:
-- ls, cat → ✅ WAJIB HAFAL  
-
 ---
 
-# 🟣 PHASE 3 — BUCKET
+# 🟣 PHASE 3 — CREATE BUCKET
 
-## STEP 4 — Generate Bucket Name
+## STEP 4 — Generate Unique Bucket Name
 
 TS=$(date +%s)  
 BUCKET=nano1-test-$TS  
 echo $BUCKET  
 
-Type:
-- $(date +%s) → ✅ WAJIB HAFAL  
-- variable → ✅ WAJIB FAHAM  
+👉 Bucket must be globally unique  
 
 ---
 
-## STEP 5 — Create Bucket
+## STEP 5 — Create S3 Bucket
 
 aws s3 mb s3://$BUCKET --region ap-southeast-1  
-
-Type:
-- aws s3 mb → ✅ WAJIB HAFAL  
 
 ---
 
@@ -102,25 +92,19 @@ Type:
 
 aws s3 cp index.html s3://$BUCKET/  
 
-Type:
-- aws s3 cp → ✅ WAJIB HAFAL  
-
 ---
 
 # 🔵 PHASE 5 — VERIFY UPLOAD
 
-## STEP 7 — Check S3
+## STEP 7 — Verify File in S3
 
 aws s3 ls s3://$BUCKET/  
 
-Type:
-- aws s3 ls → ✅ WAJIB HAFAL  
-
 ---
 
-# 🟠 PHASE 6 — CONFIG WEBSITE
+# 🟠 PHASE 6 — CONFIGURE WEBSITE
 
-## STEP 8 — Enable Website
+## STEP 8 — Enable Static Website Hosting
 
 aws s3 website s3://$BUCKET/ --index-document index.html  
 
@@ -137,12 +121,9 @@ aws s3api put-public-access-block \
   "RestrictPublicBuckets": false
 }'
 
-Type:
-- JSON → 📋 COPY PASTE  
-
 ---
 
-## STEP 10 — Apply Policy
+## STEP 10 — Apply Public Read Policy
 
 aws s3api put-bucket-policy --bucket $BUCKET --policy '{
   "Version":"2012-10-17",
@@ -153,9 +134,6 @@ aws s3api put-bucket-policy --bucket $BUCKET --policy '{
     "Resource":["arn:aws:s3:::'"$BUCKET"'/*"]
   }]
 }'
-
-Type:
-- JSON → 📋 COPY PASTE  
 
 ---
 
@@ -169,29 +147,25 @@ echo $URL
 curl $URL  
 curl -I $URL  
 
-Expected:
-- HTML output  
-- HTTP 200 OK
+---
 
 ## ✅ Expected Output
 
-Example:
+curl $URL  
 
-curl $URL
+<h1>Hello AWS</h1>  
+<p>nano daily practice</p>  
 
-<h1>Hello AWS</h1>
-<p>nano daily practice</p>
+curl -I $URL  
 
-curl -I $URL
-
-HTTP/1.1 200 OK
-Content-Type: text/html
+HTTP/1.1 200 OK  
+Content-Type: text/html  
 
 ---
 
-# 🔴 PHASE 8 — DELETE
+# 🔴 PHASE 8 — CLEANUP
 
-## STEP 12 — Cleanup
+## STEP 12 — Delete Resources
 
 aws s3 rm s3://$BUCKET --recursive  
 aws s3 rb s3://$BUCKET  
@@ -201,53 +175,77 @@ rm -rf nano1-test
 
 ---
 
-# ❌ COMMON ERROR
+# ❌ Common Errors
 
-1. Bucket name salah  
+1. Bucket name invalid  
 Fix: gunakan timestamp  
 
 2. Access Denied  
-Fix: disable block public access  
+Fix: disable public access block  
 
-3. Stuck ">"  
+3. Terminal stuck ">"  
 Fix: CTRL + C  
+
+4. Typo command  
+aws (correct), bukan ws  
 
 ---
 
-# 🧠 BASH GUIDE
+# 🧠 Bash Guide
 
-## WAJIB HAFAL
+## ✅ Must Know
 cd, mkdir, ls, cat, nano  
-$(date +%s), $VAR  
+$VAR, $(date +%s)  
 aws s3 mb, cp, ls  
 curl  
 
-## FAHAM
+## ⚠️ Understand
 aws s3api structure  
 
-## COPY PASTE
+## 📋 Copy-Paste
 JSON policy  
 
-## CUSTOM
+## 🟡 Custom
 folder name  
 file name  
 bucket name  
 
 ---
 
-# ✅ SUCCESS CHECK
+# 🧱 Skills Practiced
+
+- Bash CLI  
+- AWS CLI  
+- S3 hosting  
+- Debugging  
+- Deployment workflow  
+
+---
+
+# ✅ Success Criteria
 
 ✔ Bucket created  
 ✔ File uploaded  
 ✔ Website accessible  
 ✔ HTTP 200 OK  
-✔ Cleanup done  
+✔ Resources deleted  
 
 ---
 
-# 🚀 NOTE
+# 🚀 Why This Project Matters
 
-nano = training sahaja  
-real project guna VSCode / CI-CD  
-flow tetap sama  
+- Demonstrates real AWS CLI usage  
+- Shows understanding of S3 hosting  
+- Proves ability to debug issues  
+- End-to-end cloud workflow  
+
+👉 Suitable as beginner cloud portfolio project  
+
+---
+
+# 💡 Notes
+
+- nano used for learning  
+- real project use VSCode / CI/CD  
+- workflow remains the same  
 EOF
