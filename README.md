@@ -1,5 +1,5 @@
 cat << 'EOF' > README.md
-# 🚀 Nano AWS Project (S3 Static Website via CLI)
+# 🚀 S3 Static Website Deployment using AWS CLI
 
 ---
 
@@ -16,6 +16,13 @@ Goal:
 ✔ Publish website  
 ✔ Test (HTTP)  
 ✔ Cleanup  
+
+## 🔥 Why this project
+
+This project demonstrates:
+- real AWS CLI workflow
+- S3 static hosting
+- debugging cloud errors
 
 👉 Website boleh access = SUCCESS ✅
 
